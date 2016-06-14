@@ -30,25 +30,30 @@ if (program.listen) {
     console.log(`CTRL+C to exit`)
   })
   socket.on('message', (msg, rinfo) => {
-    console.log(`Socket got: ${msg} from ${rinfo.address}:${rinfo.port}`)
+    console.log(msg.toString())
+    console.log(`Socket got: ${new Buffer(msg).toString()} from ${rinfo.address}:${rinfo.port}`)
   })
   socket.on('error', (err) => {
     console.trace(err)
-    socket.close()
     process.exit(0)
   })
 } else {
-  socket.send(program.body, 
-    program.offset,
-    program.length, 
-    program.port, 
-    program.dest, 
+  const body = new Buffer(program.body)
+  const pkt = {
+    body: body,
+    offset: program.offset || 0,
+    length: program.length || body.length,
+    port: program.port,
+    dest: program.dest
+  }
+
+  socket.send(pkt.body, pkt.offset, pkt.length, pkt.port, pkt.dest, 
     function () {
       console.log('\n You sent a udp packet with:')
-      console.log(' * dest=%s', program.dest)
-      console.log(' * port=%s', program.port)
-      console.log(' * body=%s', program.body)
-      socket.close()
+      console.log(pkt)
       process.exit(0)
     })
 }
+
+process.on('exit', () => socket.close())
+process.on('error', () => socket.close())
