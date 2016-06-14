@@ -18,15 +18,17 @@ program
 const socket = dgram.createSocket('udp4')
 
 if (program.listen) {
-  if (program.multicast) {
-    socket.addMembership(program.multicast)
-  }
-
   socket.bind(program.port)
 
   socket.on('listening', function () {
     var address = socket.address()
     console.log(`\n Socket listening ${address.address}:${address.port}`)
+    if (program.multicast) {
+      // socket.setBroadcast(true)
+      // socket.setMulticastTTL(16)
+      console.log(`\n Subscription for mcast ${program.multicast}`)
+      socket.addMembership(program.multicast)
+    }
     console.log(`CTRL+C to exit`)
   })
   socket.on('message', (msg, rinfo) => {

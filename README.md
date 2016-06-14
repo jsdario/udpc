@@ -18,9 +18,18 @@ udpc --body "hello" --port 1450 --dest 0.0.0.0
 
 ## UDP simple server
 ```
-udpc --body "hello" --port 1500 --listen      
+udpc --port 1500 --listen      
 
  Socket listening 0.0.0.0:1500
  CTRL+C to exit
 
 ```
+
+## Subscribe to multicast addresses
+```
+udpc --listen --multicast 239.0.16.18 --port 16180
+
+ Socket listening 0.0.0.0:1500
+ CTRL+C to exit
+```
+
