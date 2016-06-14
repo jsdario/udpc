@@ -1,6 +1,6 @@
 {
   "name": "udpc",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A simple cli to send and listen for UDP packages from command line",
   "main": "udpc.js",
   "bin": {
